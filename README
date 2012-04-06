@@ -1,0 +1,67 @@
+Installation
+#######################################
+
+1. Upload the "GeekPoint" directory inside your /library/ directory.
+2. Done! 
+
+
+Usage/API
+#######################################
+
+There's only one static method which you need to call. The first argument
+(type: Zend_Config) is the configuration data you need to pass; and the
+second argument (type: array) is the data supplied by init_dependencies.
+
+	GeekPoint_CustomIndex_Helper::setDefaultRoute($config, $data);
+
+
+Configuration
+#######################################
+
+routePrefix
+	This is the route prefix which you want to set as the default.
+	Suppose you set the "foo" route-prefix as default, any links generated
+	for "foo" or "foo/index" will now point to the homepage "/".
+
+controllerClass
+	This is the controller class which will handle the homepage.
+	Specifically, the actionIndex() method in your controller will be
+	responsible for generating the homepage.
+
+majorSection
+	[Optional] The major section-name, used when generating the route-match
+	for homepage.
+
+minorSection
+	[Optional] The minor section-name, used when generating the route-match
+	for homepage.
+
+params
+	[Optional] Parameters that will be added to the request object during
+	the routing process. This enables you to set any content which depends
+	upon a request parameter to be present, as your homepage. For example:
+	node "Pages", or Threads (yes, threads! But for heaven's sake don't do that.)
+
+
+Example
+#######################################
+
+Create a new event-listener for init_dependencies. Then in your callback method,
+just set the configuration options, and call the helper. That's it.
+
+
+	public static function listen(XenForo_Dependencies_Abstract $dependencies, array $data)
+	{
+	    if (!$dependencies instanceof XenForo_Dependencies_Public)
+	    {
+	        return;
+	    }
+	
+	    $config = new Zend_Config(array(
+	        'routePrefix'     => 'recent-activity',
+	        'controllerClass' => 'XenForo_ControllerPublic_RecentActivity',
+	    ));
+	
+	    GeekPoint_CustomIndex_Helper::setDefaultRoute($config, $data);
+	}
+
